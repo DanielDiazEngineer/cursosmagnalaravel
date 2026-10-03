@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\Console\Output\ConsoleOutput;
+#use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Curso;
@@ -12,38 +12,24 @@ use App\Models\Curso;
 class UserController extends Controller {
     public function login()
     {
+        try {
+            $credentials = request(['email', 'password']);
+            if (!Auth::attempt($credentials)) {
+                return response()->json([
+                  'status' => 'error',
+                  'mensaje' => 'Las credenciales no son válidas',
+                 'data' => []]);
+            }
 
-        $credentials = request(['email', 'password']);
-        if (!Auth::attempt($credentials)) {
-            $output = new ConsoleOutput();
-            $output->writeln("Unatohirzed");
+            $user = Auth::user();
 
-            return response()->json([
-              'status' => 'error',
-              'mensaje' => 'Las credenciales no son válidas',
-             // 'data' => $user
-             'data' => []]);
-           // return response()->json(['error' => 'Unauthorized'], 401);
-        }
+            $curso = Curso::where('idalumno', '=', $user->id)->first();
+            $currentcurso = optional($curso)->currentcurso;
 
-       // $output = new ConsoleOutput();
-   // $output->writeln("Autheddd");
-    $user = Auth::user();
-
-    $curso = Curso::where('idalumno', '=', $user->id)->first();
-    $currentcurso = optional($curso)->currentcurso;
-
-    //useless no token string..
-   // $tokenResult = $user->createToken('MyApp');
-   // $tokenString = $tokenResult->accessToken;
-    
-          
             return response()->json([
                 'status' => 'success',
                 'mensaje' => 'Usuario logeado con èxito',
-               // 'data' => $user
                'data' => [
-                //'token' => $token,
                 'id' => $user->id, // user's id
                 'name' => $user->name, // user's name
                 'type' => $user->type, // user's type
@@ -51,12 +37,20 @@ class UserController extends Controller {
                 'currentcurso'=>$currentcurso
             ]
             ]);
-
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'error',
+                'mensaje' => 'Error interno al iniciar sesión',
+                'data' => $e->getMessage()
+            ]);
+        }
     }
 
     public function store(Request $request) 
     { 
 
+
+  try{
 
         $email = $request->input('email');
 
@@ -68,15 +62,8 @@ if (User::where('email', $email)->exists()) {
 }
   $postArray = $request->all();                                                   //lav5.4
   $postArray['password'] = bcrypt($postArray['password']);      //withoutthis auth faileeeed1!!
-  //$output = new ConsoleOutput();
- // $output->writeln($postArray['password']);
-  
 
-  //$user = User::create($request); 
-
-  try{
-
-   $user = User::create($postArray); 
+   $user = User::create($postArray);
 
    
    if($user['type'] == 'user'){
@@ -107,7 +94,7 @@ if (User::where('email', $email)->exists()) {
 
 
 
- }catch(Exception $e){
+ }catch(\Throwable $e){
 
    return response()->json([
      'status' => 'error',

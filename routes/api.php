@@ -35,8 +35,8 @@ Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('config:cache');
     $exitCode = Artisan::call('route:clear');
     //$exitCode = Artisan::call('view:clear');
-    $output = new ConsoleOutput();
-    $output->writeln(env('FRONTEND_URL'));
+    //$output = new ConsoleOutput();
+   // $output->writeln(env('FRONTEND_URL'));
 
     return 'DONE'; //Return anything
   });
