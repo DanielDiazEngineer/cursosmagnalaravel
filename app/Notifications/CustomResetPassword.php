@@ -7,8 +7,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
-
 class CustomResetPassword extends Notification
 {
     use Queueable;
@@ -20,10 +18,6 @@ class CustomResetPassword extends Notification
      */
     public function __construct($token)
     {
-
-           $output = new ConsoleOutput();
-    $output->writeln($token);
-        //
         $this->token = $token;
     }
 
@@ -52,7 +46,7 @@ class CustomResetPassword extends Notification
                 return (new MailMessage)
                     ->subject('Recuperar cuenta')
                     ->line('Has solicitado recuperar tu contraseña.')
-                    ->action('Cambia tu contraseña','https://magna.stratos360.com.mx'.'/resetpass/'.$this->token)
+                    ->action('Cambia tu contraseña','https://magna-cursos.uniprotec.net'.'/resetpass/'.$this->token)
                     ->line('Si no has solicitado esto, por favor ignora este mensaje.');
     }
 

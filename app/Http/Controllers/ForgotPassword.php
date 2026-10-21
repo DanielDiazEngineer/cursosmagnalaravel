@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 
-
-use Symfony\Component\Console\Output\ConsoleOutput;
-
 class ForgotPassword extends Controller
 {
 
@@ -21,9 +18,6 @@ class ForgotPassword extends Controller
     $response = Password::broker()->sendResetLink(
         $request->only('email')
     );
-
-    $output = new ConsoleOutput();
-    $output->writeln($response);
 
     return $response == Password::RESET_LINK_SENT
                 ? response()->json(['status' => 'success', 'message' => 'Reset link sent to your email.'], 200)
