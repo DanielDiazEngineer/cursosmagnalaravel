@@ -81,8 +81,8 @@ Route::get('/clear-cache', function() {
   Route::get('quiz2','CursoController@showallquiz2');
   Route::get('quiz3','CursoController@showallquiz3');
   Route::get('quiz4','CursoController@showallquiz4');
-  Route::get('quiz5','CursoController@showallquiz4');
-  Route::get('quiz6','CursoController@showallquiz4');
+  Route::get('quiz5','CursoController@showallquiz5');
+  Route::get('quiz6','CursoController@showallquiz6');
 
 
   Route::get('curso/','CursoController@showall');
