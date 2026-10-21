@@ -17,6 +17,11 @@ class Quiz1 extends Model
         'a3',
         'a4',
         'a5',
+        'a6',
+        'a7',
+        'a8',
+        'a9',
+        'a10',
         'score',
        
     ];
